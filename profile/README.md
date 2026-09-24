@@ -1,4 +1,4 @@
-# Orbit Protocol
+# Orbit
 
 > Non-custodial pull payments and atomic batch payroll on Stellar Soroban.
 
