@@ -53,7 +53,7 @@ sequenceDiagram
 ## Links
 
 - **Live App**: [orbit-lemon-mu.vercel.app](https://orbit-lemon-mu.vercel.app/)
-- **Docs**: [orbit-lemon-mu.vercel.app/docs](https://orbit-lemon-mu.vercel.app/docs)
+- **Docs**: [orbit-docs-eta.vercel.app](https://orbit-docs-eta.vercel.app)
 
 ---
 
