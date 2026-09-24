@@ -1,39 +1,59 @@
 # Orbit Protocol
 
-Non-Custodial Pull Payments and Atomic Batch Payroll Engine on Stellar Soroban
+> Non-custodial pull payments and atomic batch payroll on Stellar Soroban.
+
+[![Stellar](https://img.shields.io/badge/Stellar-Soroban-7B68EE?style=flat-square&logo=stellar)](https://stellar.org)
+[![Rust](https://img.shields.io/badge/Rust-no__std-orange?style=flat-square&logo=rust)](https://github.com/Orbit-xyz/Orbit/tree/main/contracts/soroban)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=nextdotjs)](https://github.com/Orbit-xyz/Orbit/tree/main/apps/frontend)
+[![Network](https://img.shields.io/badge/network-testnet-yellow?style=flat-square)](https://stellar.expert/explorer/testnet/contract/CAZBZBUWBSQYK2RZ6WHMXVDLIQHSU5WD7ANZYL6HLNSCRUOTNYCDYQNG)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](https://github.com/Orbit-xyz/Orbit)
 
 ---
 
 ## Overview
 
-Orbit Protocol is decentralized, non-custodial payments infrastructure built natively on **Stellar Soroban**. It makes recurring subscription charges and coordinated payroll possible without custodial escrow or manual wallet approval for every billing cycle.
+Orbit makes recurring stablecoin billing work without custody. A subscriber signs once, sets a spending ceiling on the token (SAC allowance), and keeps their funds. The merchant can pull a fixed amount only after each billing interval has passed on the ledger.
 
-Through Soroban-native **Allowance Vaults**, Orbit separates payment authorization from fund custody. Subscribers grant merchants a time-bounded, spending-capped allowance while keeping full custody of their assets. Merchants can pull approved USDC only when the interval has elapsed and the amount is within the approved cap.
+```mermaid
+sequenceDiagram
+    participant User as Subscriber
+    participant Orbit as OrbitContract
+    participant Merchant
 
-## Core Components
+    User->>Orbit: approve + create_vault (signed once)
+    loop every interval
+        Merchant->>Orbit: pull_funds
+        Orbit->>Merchant: transfer_from(user -> merchant)
+    end
+```
 
-- **Allowance Vaults**: non-custodial recurring payments enforced by ledger timestamps and spending caps.
-- **Batch Payroll Engine**: atomic payouts to many recipient wallets in a single transaction. If any transfer fails, the whole batch reverts.
-- **Merchant Control Center**: subscription plans, subscriber management, payment links, and settlement treasury (Next.js 15).
-- **Hosted Checkout and Widget SDK**: `/pay/[id]` checkout pages and the embeddable `<OrbitCheckout />` React component with Freighter support.
-- **Developer Portal**: API keys, HMAC-signed webhooks, and integration docs.
+## Contract Functions
+
+| Function | Auth | Description |
+|---|---|---|
+| `create_vault(user, merchant, token, amount_per_interval, interval_seconds)` | user | Records billing terms. Moves no funds. |
+| `pull_funds(user, merchant)` | merchant | Pulls one cycle if `now >= last_pull + interval`. |
+| `batch_disburse(sender, token, splits)` | sender | Pays many recipients in one atomic transaction. |
 
 ## Deployment
 
 | Parameter | Value |
 | :--- | :--- |
 | **Orbit Contract ID** | [`CAZBZBUWBSQYK2RZ6WHMXVDLIQHSU5WD7ANZYL6HLNSCRUOTNYCDYQNG`](https://stellar.expert/explorer/testnet/contract/CAZBZBUWBSQYK2RZ6WHMXVDLIQHSU5WD7ANZYL6HLNSCRUOTNYCDYQNG) |
-| **Settlement Asset** | Native Testnet USDC |
 | **Network** | Stellar Testnet |
+| **Settlement Asset** | USDC via SAC |
 
 ## Repositories
 
-- [**Orbit**](https://github.com/Orbit-xyz/Orbit): Soroban contracts, Merchant Control Center, and Checkout Widget SDK.
+| Repo | Contents |
+|---|---|
+| [**Orbit**](https://github.com/Orbit-xyz/Orbit) | Soroban contract, Merchant Control Center, Merchant API, Checkout Widget SDK |
 
 ## Links
 
 - **Live App**: [orbit-lemon-mu.vercel.app](https://orbit-lemon-mu.vercel.app/)
+- **Docs**: [orbit-lemon-mu.vercel.app/docs](https://orbit-lemon-mu.vercel.app/docs)
 
 ---
 
-Licensed under the MIT License.
+MIT. Orbit Contributors.
