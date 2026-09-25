@@ -48,7 +48,7 @@ sequenceDiagram
 | Repo | Contents |
 |---|---|
 | [**Orbit**](https://github.com/Orbit-xyz/Orbit) | Soroban contract, Merchant Control Center, Merchant API, Checkout Widget SDK |
-| [**orbit-docs**](https://github.com/Orbit-xyz/orbit-docs) | Developer documentation (Mintlify): guides, contract reference, API reference |
+| [**orbit-docs**](https://github.com/Orbit-xyz/orbit-docs) | Developer documentation guides, contract reference, API reference |
 
 ## Links
 
